@@ -6,11 +6,10 @@ import com.meenakshimishra.kanboom.dto.task.UpdateStatusRequest;
 import com.meenakshimishra.kanboom.entity.Task;
 import com.meenakshimishra.kanboom.entity.TaskStatus;
 import com.meenakshimishra.kanboom.entity.User;
+import com.meenakshimishra.kanboom.exception.ResourceNotFoundException;
 import com.meenakshimishra.kanboom.repository.TaskRepository;
 import com.meenakshimishra.kanboom.security.CurrentUserProvider;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -72,6 +71,6 @@ public class TaskService {
     private Task findOwnedTask(Long id) {
         Long ownerId = currentUserProvider.getCurrentUser().getId();
         return taskRepository.findByIdAndOwnerId(id, ownerId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Task not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
     }
 }
